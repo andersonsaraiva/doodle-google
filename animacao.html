@@ -1,0 +1,173 @@
+<html>
+  <head>
+    <title>Cavalinho</title>
+    <style type="text/css">
+      * {
+        margin: 0;
+        padding: 0;
+      }
+
+      #wrapper {
+        margin: 0 auto;
+        width: 469px;
+        position: relative;
+      }
+
+      #painel {
+        background: url("painel.png");
+        width: 469px;
+        height: 162px;
+        position: absolute;
+        top: 50px;
+        left: 0;
+        z-index: 10;
+      }
+
+      #guardaPeliculas {
+        float: left;
+        width: 469px;
+        text-align: center;
+        padding-top: 50px;
+      }
+
+      #guardaPeliculas #pelicula {
+        background: url("pelicula.jpg") repeat 0 0;
+        width: 469px;
+        height: 162px;
+        margin: 0;
+        padding: 0;
+        float: left;
+      }
+
+      #guardaStatus {
+        float: left;
+        padding-top: 20px;
+        width: 100%;
+      }
+
+      #guardaStatus label {
+        float: left;
+        width: 300px;
+      }
+
+      #guardaStatus input {
+        float: left;
+        width: 169px;
+      }
+
+      #play {
+        width: 100px;
+        height: 50px;
+        margin: 10px auto 0 auto;
+      }
+    </style>
+    <script type="text/javascript">
+      var valorBackPosition = 0;
+      var incrementoAtual = 1.05;
+      var valorIncremento = 1.05;
+      var distanciaQuadro = 0;
+      var finalQuadro = false;
+      var delay = 41;
+
+      function animar() {
+        document.getElementById("pelicula").style.backgroundPosition =
+          valorBackPosition + "px 0";
+
+        valorBackPosition -= incrementoAtual;
+
+        if (valorBackPosition <= -804) {
+          valorBackPosition = valorBackPosition + 804;
+        }
+
+        if (!pause) {
+          setTimeout(animar, delay);
+        }
+      }
+
+      function verificaDistanciaQuadro() {
+        if (incrementoAtual != 67) {
+          distanciaQuadro -= incrementoAtual;
+
+          if (distanciaQuadro <= -67) {
+            distanciaQuadro = distanciaQuadro + 67;
+            finalQuadro = true;
+          }
+          if (!pause) {
+            setTimeout(verificaDistanciaQuadro, delay);
+          }
+        }
+      }
+
+      function modificaVelocidade() {
+        if (incrementoAtual + valorIncremento > 63) {
+          if (incrementoAtual == 63) {
+            if (distanciaQuadro == -2.3414223353718455) {
+              incrementoAtual = 67;
+              return;
+            }
+          } else {
+            incrementoAtual = 63;
+          }
+        } else {
+          incrementoAtual *= valorIncremento;
+        }
+
+        if (!pause) {
+          setTimeout(modificaVelocidade, delay);
+        }
+      }
+
+      function verificaStatus() {
+        document.getElementById("distanciaQuadro").value = distanciaQuadro;
+        document.getElementById("incrementoAtual").value = incrementoAtual;
+        document.getElementById("valorBackPosition").value = valorBackPosition;
+        document.getElementById("finalQuadro").value = finalQuadro;
+      }
+
+      window.onload = function () {
+        animacaoRodando = false;
+        document.getElementById("play").onclick = function () {
+          if (!animacaoRodando) {
+            animacaoRodando = true;
+            pause = false;
+            animar();
+            verificaDistanciaQuadro();
+            modificaVelocidade();
+            setInterval(verificaStatus, delay);
+          } else {
+            if (incrementoAtual != 67) {
+              modificaVelocidade();
+            }
+            pause = true;
+            animar();
+            verificaDistanciaQuadro();
+          }
+        };
+      };
+    </script>
+  </head>
+
+  <body>
+    <div id="wrapper">
+      <div id="painel"></div>
+      <div id="guardaPeliculas">
+        <div id="pelicula"></div>
+        <button id="play">Play</button>
+        <div id="guardaStatus">
+          <label>Distancia do Quadro:</label>
+          <input type="type" id="distanciaQuadro" name="name" value="" />
+          <br />
+          <label>Incremento Atual:</label>
+          <input type="type" id="incrementoAtual" name="name" value="" />
+          <br />
+          <label>Background Position:</label>
+          <input type="type" id="valorBackPosition" name="name" value="" />
+          <br />
+          <label>Final Quadro:</label>
+          <input type="type" id="finalQuadro" name="name" value=" " />
+          <br />
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
